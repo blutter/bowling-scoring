@@ -46,6 +46,16 @@ describe('Given a BowlingGame', () => {
       test('then the score is the sum of the pins knocked down plus the number knocked down in the next bowl', () => {
         expect(bowlingGame.score()).toBe(20);
       });
+
+      describe('and rolls 0', () => {
+        beforeEach(() => {
+          bowlingGame.roll(0);
+        });
+  
+        test('then the score still 20', () => {
+          expect(bowlingGame.score()).toBe(20);
+        });
+      });
     });
   });
 
@@ -66,6 +76,27 @@ describe('Given a BowlingGame', () => {
 
       test('then the score is the number of pins knocked down plus the number of pins knocked down in the next two bowls', () => {
         expect(bowlingGame.score()).toBe(28);
+      });
+    });
+
+    describe('and then rolls a 0 and a 2', () => {
+      beforeEach(() => {
+        bowlingGame.roll(0);
+        bowlingGame.roll(2);
+      });
+
+      test('then the score is 10 + 2 + (0 + 2)', () => {
+        expect(bowlingGame.score()).toBe(10 + 2 + (0 + 2));
+      });
+
+      describe('and then rolls a 5', () => {
+        beforeEach(() => {
+          bowlingGame.roll(5);
+        });
+  
+        test('then the score is 10 + 2 + 5 + (0 + 2)', () => {
+          expect(bowlingGame.score()).toBe(10 + 2 + 5 + (0 + 2));
+        });
       });
     });
 
