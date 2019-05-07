@@ -85,7 +85,27 @@ describe('Given a BowlingGame', () => {
         });
       });
     });
-  });
+
+    describe('and then scores a spare', () => {
+      beforeEach(() => {
+        bowlingGame.roll(6);
+        bowlingGame.roll(4);
+      });
+
+      test('then player has a nominal score 10 + 6 + 4 + (6 + 4)', () => {
+        expect(bowlingGame.score()).toBe(10 + 6 + 4 + (6 + 4));
+      });
+
+      describe('and then rolls a 3', () => {
+        beforeEach(() => {
+          bowlingGame.roll(3);
+        });
+
+        test('then player has a score of 10 + 6 + 4 + 3 + (6 + 4) + 3', () => {
+          expect(bowlingGame.score()).toBe(10 + 6 + 4 + 3 + (6 + 4) + 3);
+        });
+      });
+    });
   });
 });
 
