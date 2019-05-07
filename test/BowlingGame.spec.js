@@ -56,5 +56,26 @@ describe('Given a BowlingGame', () => {
       });
     });
   });
+
+  describe('when the player scores a strike', () => {
+    beforeEach(() => {
+      bowlingGame.roll(10);
+    });
+
+    test('then player has a score of 10', () => {
+      expect(bowlingGame.score()).toBe(10);
+    });
+
+    describe('and then rolls a 5 and a 4', () => {
+      beforeEach(() => {
+        bowlingGame.roll(5);
+        bowlingGame.roll(4);
+      });
+
+      test('then the score is the number of pins knocked down plus the number of pins knocked down in the next two bowls', () => {
+        expect(bowlingGame.score()).toBe(28);
+      });
+    });
+  });
 });
 
