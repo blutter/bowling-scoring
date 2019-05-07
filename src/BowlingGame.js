@@ -3,8 +3,8 @@ export class BowlingGame {
     this.currentScore = 0;
     this.bowlInFrame = 0;
     this.numberOfPinsHitInFrame = 0;
-    this.isPreviousFrameSpare = false;
-    this.isPreviousFrameStrike = false;
+    this.numberOfRemainingRollsForSpareScore = 0;
+    this.isPreviousFrameStrike = 0;
   }
 
   score() {
@@ -19,15 +19,15 @@ export class BowlingGame {
 
     if (this.isScoringASpare() || this.isScoringAStrike()) {
       this.currentScore += noOfPins;
+      --this.numberOfRemainingRollsForSpareScore;
     }
 
     if (this.isEndOfFrame()) {
       if (this.isCurrentFrameSpare()) {
-        this.isPreviousFrameSpare = true;
+        this.numberOfRemainingRollsForSpareScore = 1;
         this.isPreviousFrameStrike = false;
       } else if (this.isCurrentFrameStrike()) {
         this.isPreviousFrameStrike = true;
-        this.isPreviousFrameSpare = false;
       }
 
       this.bowlInFrame = 0;
@@ -35,16 +35,12 @@ export class BowlingGame {
     }
   }
 
-  isPreviousFrameASpare() {
-    return this.isPreviousFrameSpare;
-  }
-
   isPreviousFrameAStrike() {
     return this.isPreviousFrameStrike;
   }
 
   isScoringASpare() {
-    return this.bowlInFrame === 1 && this.isPreviousFrameASpare();
+    return this.numberOfRemainingRollsForSpareScore > 0;
   }
 
   isScoringAStrike() {

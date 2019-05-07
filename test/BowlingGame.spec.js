@@ -10,10 +10,6 @@ describe('Given a BowlingGame', () => {
     test('then the initial score is 0', () => {
       expect(bowlingGame.score()).toBe(0);
     });
-
-    test('then the previous frame is not a spare', () => {
-      expect(bowlingGame.isPreviousFrameASpare()).toBe(false);
-    });
   });
 
   describe('when the player hits 5 pins', () => {
@@ -40,10 +36,6 @@ describe('Given a BowlingGame', () => {
     beforeEach(() => {
       bowlingGame.roll(4);
       bowlingGame.roll(6);
-    });
-
-    test('then player has scored a spare', () => {
-      expect(bowlingGame.isPreviousFrameASpare()).toBe(true);
     });
 
     describe('and then in the next bowl hits 5 pins', () => {
