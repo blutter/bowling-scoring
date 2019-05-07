@@ -68,6 +68,24 @@ describe('Given a BowlingGame', () => {
         expect(bowlingGame.score()).toBe(28);
       });
     });
+
+    describe('and then scores another strike', () => {
+      beforeEach(() => {
+        bowlingGame.roll(10);
+      });
+
+      describe('and then rolls a 2 and a 3', () => {
+        beforeEach(() => {
+          bowlingGame.roll(2);
+          bowlingGame.roll(3);
+        });
+
+        test('then player has a score of 10 + 10 + 2 + 3 + (10 + 2) + (2 + 3)', () => {
+          expect(bowlingGame.score()).toBe(10 + 10 + 2 + 3 + (10 + 2) + (2 + 3));
+        });
+      });
+    });
+  });
   });
 });
 
