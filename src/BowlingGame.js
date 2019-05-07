@@ -1,7 +1,6 @@
 export class BowlingGame {
   constructor() {
     this.currentScore = 0;
-    this.frameNumber = 1;
     this.bowlInFrame = 0;
     this.numberOfPinsHitInFrame = 0;
     this.isPreviousFrameSpare = false;
@@ -9,10 +8,6 @@ export class BowlingGame {
 
   score() {
     return this.currentScore;
-  }
-
-  frameNumber() {
-    return this.frameNumber;
   }
 
   roll(noOfPins) {
