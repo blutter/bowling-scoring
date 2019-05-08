@@ -1,11 +1,9 @@
 export class BowlingGame {
   constructor() {
     this.currentScore = 0;
-    this.bowlInFrame = 0;
-    this.numberOfPinsHitInFrame = 0;
-    this.numberOfRemainingRollsForSpareScore = 0;
-    this.numberOfRemainingRollsForStrikeScore = 0;
-    this.numberOfConsequitiveStrikes = 0;
+    this.frameScores = [];
+
+    this.addNewFrame();
   }
 
   score() {
@@ -13,61 +11,85 @@ export class BowlingGame {
   }
 
   roll(noOfPins) {
-    ++this.bowlInFrame;
-    this.numberOfPinsHitInFrame += noOfPins;
+    this.addHitPinsToCurrentFrame(noOfPins);
 
     this.currentScore += noOfPins;
-
     if (this.isScoringASpare() || this.isScoringAStrike()) {
       this.currentScore += noOfPins;
-
-      if (this.isScoringASpare()) {
-        --this.numberOfRemainingRollsForSpareScore;
-      }
-      if (this.isScoringAStrike()) {
-        --this.numberOfRemainingRollsForStrikeScore;
-      }
     }
 
-    if (this.numberOfConsequitiveStrikes >= 2) {
+    if (this.isScoringAfterTwoConsequtiveStrikes()) {
       this.currentScore += noOfPins;
     }
 
     if (this.isEndOfFrame()) {
-      if (this.isCurrentFrameSpare()) {
-        this.numberOfRemainingRollsForSpareScore = 1;
-        this.numberOfConsequitiveStrikes = 0;
-      } else if (this.isCurrentFrameStrike()) {
-        this.numberOfRemainingRollsForStrikeScore += 2;
-        ++this.numberOfConsequitiveStrikes;
-      } else {
-        this.numberOfConsequitiveStrikes = 0;
+      let currentFrame = this.currentFrame();
+      if (noOfPins === 10) {
+        currentFrame.isStrike = true;
+      } else if (currentFrame.pinsHit.reduce((acc, val) => acc + val, 0) === 10) {
+        currentFrame.isSpare = true;
       }
 
-      this.bowlInFrame = 0;
-      this.numberOfPinsHitInFrame = 0;
-    } else {
-      this.numberOfConsequitiveStrikes = 0;
+      this.addNewFrame();
     }
   }
 
+  addHitPinsToCurrentFrame(noOfPins) {
+    let currentFrame = this.currentFrame();
+    let pinsHitInFrame = currentFrame.pinsHit;
+    pinsHitInFrame.push(noOfPins);
+  }
+
+  addNewFrame() {
+    this.frameScores.push({
+      pinsHit: [],
+      isSpare: false,
+      isStrike: false
+    });
+  }
+
+  currentFrame() {
+    return this.frameScores.slice(-1)[0];
+  }
+
+  previousFrame() {
+    let previousFrame = null;
+    if (this.frameScores.length > 1) {
+      previousFrame = this.frameScores.slice(-2)[0];
+    }
+
+    return previousFrame;
+  }
+
+  secondLastFrame() {
+    let secondLastFrame = null;
+    if (this.frameScores.length > 2) {
+      secondLastFrame = this.frameScores.slice(-3)[0];
+    }
+
+    return secondLastFrame;
+  }
+
   isScoringASpare() {
-    return this.numberOfRemainingRollsForSpareScore > 0;
+    let previousFrame = this.previousFrame();
+    return previousFrame && previousFrame.isSpare;
   }
 
   isScoringAStrike() {
-    return this.numberOfRemainingRollsForStrikeScore > 0;
+    let previousFrame = this.previousFrame();
+    return previousFrame && previousFrame.isStrike;
   }
 
-  isCurrentFrameSpare() {
-    return this.bowlInFrame === 2 && this.numberOfPinsHitInFrame === 10;
-  }
-
-  isCurrentFrameStrike() {
-    return this.bowlInFrame === 1 && this.numberOfPinsHitInFrame === 10;
+  isScoringAfterTwoConsequtiveStrikes() {
+    let isFirstBowlOfFrame = this.currentFrame().pinsHit.length === 1;
+    let previousFrame = this.previousFrame();
+    let secondLastFrame = this.secondLastFrame();
+    return isFirstBowlOfFrame && previousFrame && previousFrame.isStrike && secondLastFrame && secondLastFrame.isStrike;
   }
 
   isEndOfFrame() {
-    return this.bowlInFrame === 2 || this.numberOfPinsHitInFrame === 10;
+    let currentFrame = this.currentFrame();
+    return currentFrame.pinsHit.length === 2 || 
+      currentFrame.pinsHit.reduce((acc, val) => acc + val, 0) === 10;
   }
 }
