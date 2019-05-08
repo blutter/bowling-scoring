@@ -14,6 +14,7 @@ export class BowlingGame {
     this.addHitPinsToCurrentFrame(noOfPins);
 
     this.currentScore += noOfPins;
+    
     if (this.isScoringASpare() || this.isScoringAStrike()) {
       this.currentScore += noOfPins;
     }
@@ -23,13 +24,6 @@ export class BowlingGame {
     }
 
     if (this.isEndOfFrame()) {
-      let currentFrame = this.currentFrame();
-      if (noOfPins === 10) {
-        currentFrame.isStrike = true;
-      } else if (currentFrame.pinsHit.reduce((acc, val) => acc + val, 0) === 10) {
-        currentFrame.isSpare = true;
-      }
-
       this.addNewFrame();
     }
   }
@@ -38,7 +32,13 @@ export class BowlingGame {
     let currentFrame = this.currentFrame();
     let pinsHitInFrame = currentFrame.pinsHit;
     pinsHitInFrame.push(noOfPins);
-  }
+
+    if (noOfPins === 10) {
+      currentFrame.isStrike = true;
+    } else if (currentFrame.pinsHit.reduce((acc, val) => acc + val, 0) === 10) {
+      currentFrame.isSpare = true;
+    }
+}
 
   addNewFrame() {
     this.frameScores.push({
