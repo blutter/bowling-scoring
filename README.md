@@ -1,3 +1,19 @@
+# Overview
+
+This is an implementation of the DiUS coding test in Javascript.
+
+To install dependencies:
+
+    yarn
+
+To run tests:
+
+    yarn test
+
+Implementation is in the `src` directory and the tests are in `test`.
+
+# Original Problem Description
+
 DiUS is starting a bowling club. To help with the club, we have engaged you to program a scoring system. 
 
 The features on the system are:
